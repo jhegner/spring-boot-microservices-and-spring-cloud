@@ -2,6 +2,7 @@ package br.com.jhegnerlabs.microservices.mapper;
 
 import br.com.jhegnerlabs.microservices.dto.UserDTO;
 import br.com.jhegnerlabs.microservices.model.request.CreateUserRequest;
+import br.com.jhegnerlabs.microservices.model.response.CreateUserResponse;
 import br.com.jhegnerlabs.microservices.repository.UserEntity;
 
 import java.time.LocalDateTime;
@@ -25,11 +26,11 @@ public class UserMapper implements Mapper<UserDTO, UserEntity> {
 
     public UserDTO map(UserEntity source) {
         return new UserDTO(
+                source.getUserId(),
                 source.getFirstName(),
                 source.getLastName(),
                 EMPTY,
                 source.getEmail(),
-                source.getUserId(),
                 EMPTY
         );
     }
@@ -42,6 +43,15 @@ public class UserMapper implements Mapper<UserDTO, UserEntity> {
                 source.getPassword(),
                 source.getEmail(),
                 EMPTY
+        );
+    }
+
+    public CreateUserResponse mapToResponse(UserDTO source) {
+        return new CreateUserResponse(
+                source.getFirstName(),
+                source.getLastName(),
+                source.getEmail(),
+                source.getUserId()
         );
     }
 }
