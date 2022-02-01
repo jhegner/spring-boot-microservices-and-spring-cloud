@@ -4,6 +4,8 @@ import br.com.jhegnerlabs.microservices.dto.UserDTO;
 import br.com.jhegnerlabs.microservices.model.request.CreateUserRequest;
 import br.com.jhegnerlabs.microservices.repository.UserEntity;
 
+import java.time.LocalDateTime;
+
 import static org.apache.commons.lang.StringUtils.EMPTY;
 
 public class UserMapper implements Mapper<UserDTO, UserEntity> {
@@ -11,11 +13,13 @@ public class UserMapper implements Mapper<UserDTO, UserEntity> {
     @Override
     public UserEntity map(UserDTO source) {
         return new UserEntity(
-                Long.parseLong(source.getUserId()),
+                null,
+                source.getUserId(),
                 source.getFirstName(),
                 source.getLastName(),
                 source.getEmail(),
-                source.getEncriptedPassword()
+                source.getEncriptedPassword(),
+                LocalDateTime.now()
         );
     }
 
@@ -25,18 +29,18 @@ public class UserMapper implements Mapper<UserDTO, UserEntity> {
                 source.getLastName(),
                 EMPTY,
                 source.getEmail(),
-                source.getId().toString(),
+                source.getUserId(),
                 EMPTY
         );
     }
 
     public UserDTO map(CreateUserRequest source) {
         return new UserDTO(
+                EMPTY,
                 source.getFirstName(),
                 source.getLastName(),
                 source.getPassword(),
                 source.getEmail(),
-                EMPTY,
                 EMPTY
         );
     }

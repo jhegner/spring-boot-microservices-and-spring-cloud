@@ -6,6 +6,8 @@ import br.com.jhegnerlabs.microservices.usecases.CreateUserUsecase;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,13 +32,13 @@ public class UsersController {
     }
 
     @PostMapping
-    public String createUser(@Validated @RequestBody CreateUserRequest model){
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createUser(@Validated @RequestBody CreateUserRequest model){
 
         log.log(INFO, "POST - Requisicao de novo usuario", model);
 
         createUserUsecase.create(new UserMapper().map(model));
 
-        return "Create user method is called";
     }
 
 }
