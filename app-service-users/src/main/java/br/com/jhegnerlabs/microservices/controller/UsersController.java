@@ -7,6 +7,7 @@ import br.com.jhegnerlabs.microservices.usecases.CreateUserUsecase;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,10 @@ public class UsersController {
         return "Executado na porta " + env.getProperty("local.server.port");
     }
 
-    @PostMapping
+    @PostMapping(
+            consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
+    )
     public ResponseEntity postUser(@RequestHeader Map<String, String> headers, @Validated @RequestBody CreateUserRequest model) {
 
         log.log(INFO, "POST - Requisicao de novo usuario - body:{}", model);
