@@ -22,7 +22,7 @@ public class CreateUserUsecase {
         this.passEncrypterService = passEncrypterService;
     }
 
-    public UserDTO create(UserDTO user) {
+    public UserDTO registra(UserDTO user) {
 
         user.setUserId(this.geraUserId());
         user.setEncriptedPassword(encriptyPassword(user.getPassword()));
@@ -32,12 +32,16 @@ public class CreateUserUsecase {
         return userMapper.map(repository.save(userMapper.map(user)));
     }
 
+    public UserDTO consulta(String userId) {
+
+        return new UserMapper().map(this.repository.findByUserId(userId));
+
+    }
+
     private String encriptyPassword(String password) {
         return passEncrypterService.encrypte(password);
     }
-
     private String geraUserId() {
         return UUID.randomUUID().toString();
     }
-
 }

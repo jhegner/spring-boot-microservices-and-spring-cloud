@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.ws.rs.PathParam;
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
@@ -36,16 +37,22 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@RequestHeader Map<String, String> headers, @Validated @RequestBody CreateUserRequest model) {
+    public ResponseEntity postUser(@RequestHeader Map<String, String> headers, @Validated @RequestBody CreateUserRequest model) {
 
-        log.log(INFO, "POST - Requisicao de novo usuario", model);
+        log.log(INFO, "POST - Requisicao de novo usuario - body:{}", model);
 
         var userMapper = new UserMapper();
 
-        var resultBody = userMapper.mapToResponse(createUserUsecase.create(userMapper.map(model)));
+        var resultBody = userMapper.mapToResponse(createUserUsecase.registra(userMapper.map(model)));
 
         return ResponseEntity.created(createResourceURI(resultBody, headers)).body(resultBody);
 
+    }
+
+    @GetMapping(value = "/{userId}")
+    public ResponseEntity<CreateUserResponse> getUser(@PathVariable("userId") String userId) {
+        log.log(INFO, "GET - Consultando user pelo id: {}", userId);
+        return ResponseEntity.ok(new UserMapper().mapToResponse(this.createUserUsecase.consulta(userId)));
     }
 
     private URI createResourceURI(CreateUserResponse responseData, Map<String, String> headers) {
